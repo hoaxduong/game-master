@@ -9,7 +9,7 @@ export const GET: APIRoute = async (ctx) => {
   if (!id) return new Response("Missing ID", { status: 400 });
 
   // Optional: Check auth if sessions are private usage
-  const auth = getAuth(ctx.locals.runtime.env.DB);
+  const auth = getAuth(ctx.locals.runtime.env);
   const session = await auth.api.getSession({ headers: ctx.request.headers });
 
   const db = drizzle(ctx.locals.runtime.env.DB);
@@ -39,7 +39,7 @@ export const PUT: APIRoute = async (ctx) => {
   const { id } = ctx.params;
   if (!id) return new Response("Missing ID", { status: 400 });
 
-  const auth = getAuth(ctx.locals.runtime.env.DB);
+  const auth = getAuth(ctx.locals.runtime.env);
   const session = await auth.api.getSession({ headers: ctx.request.headers });
   if (!session) {
     return new Response("Unauthorized", { status: 401 });

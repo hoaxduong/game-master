@@ -5,7 +5,7 @@ import { desc, eq, count } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 
 export const GET: APIRoute = async (ctx) => {
-  const auth = getAuth(ctx.locals.runtime.env.DB);
+  const auth = getAuth(ctx.locals.runtime.env);
   const session = await auth.api.getSession({ headers: ctx.request.headers });
 
   if (!session) {
