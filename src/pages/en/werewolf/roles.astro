@@ -1,0 +1,23 @@
+---
+import { RoleDictionary } from "@/modules/werewolf/components/RoleDictionary";
+import Layout from "@/layouts/main.astro";
+import { getLangFromUrl } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<Layout title="Werewolf - Role Dictionary">
+  <main class="min-h-screen">
+    <RoleDictionary client:load lang={lang} />
+  </main>
+</Layout>
+
+<style>
+  main {
+    background: radial-gradient(
+      circle at top center,
+      rgba(var(--accent-rgb), 0.1) 0%,
+      transparent 70%
+    );
+  }
+</style>
