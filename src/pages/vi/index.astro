@@ -14,8 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowRight, Users, Book, Settings, Play, Github } from "lucide-react";
 
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+const currentPath = Astro.url.pathname.replace(new RegExp(`^/${lang}`), "") || "/";
 
 const werewolfPath = `/${lang}/werewolf`;
 const rolesPath = `/${lang}/werewolf/roles`;
@@ -25,6 +29,9 @@ const rolesPath = `/${lang}/werewolf/roles`;
   <main
     class="relative min-h-[calc(100vh-64px)] flex flex-col items-center justify-center p-4 sm:p-6 bg-background overflow-hidden"
   >
+    <div class="absolute top-4 right-4 z-50">
+      <LanguageSwitcher client:load currentLang={lang} currentPath={currentPath} />
+    </div>
     <!-- Background Decor -->
     <div
       class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl aspect-square bg-[radial-gradient(circle_at_center,oklch(0.55_0.25_264/0.2),transparent_75%)] -z-10 opacity-70"

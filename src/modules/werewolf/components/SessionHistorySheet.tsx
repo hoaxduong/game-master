@@ -59,7 +59,12 @@ export function SessionHistorySheet() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" title="History">
+        <Button
+          variant="outline"
+          size="icon"
+          title="History"
+          className="rounded-full"
+        >
           <History className="h-4 w-4" />
         </Button>
       </SheetTrigger>

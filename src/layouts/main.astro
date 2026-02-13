@@ -35,17 +35,6 @@ const currentPath =
   <body
     class="bg-background text-foreground font-sans antialiased selection:bg-primary/20"
   >
-    <header
-      class="fixed top-0 left-0 right-0 z-50 px-4 py-3 flex justify-end items-center pointer-events-none"
-    >
-      <div class="pointer-events-auto">
-        <LanguageSwitcher
-          client:load
-          currentLang={lang}
-          currentPath={currentPath}
-        />
-      </div>
-    </header>
     <div class="min-h-screen pt-safe pb-safe pl-safe pr-safe">
       <slot />
     </div>

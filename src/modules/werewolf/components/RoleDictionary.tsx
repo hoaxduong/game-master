@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Search, ChevronRight, Book } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { PageHeader } from "@/components/PageHeader";
 import { WEREWOLF_ROLES, type WerewolfRole } from "../types/roles";
 import { werewolf } from "../i18n";
 
@@ -68,20 +69,21 @@ export const RoleDictionary: React.FC<RoleDictionaryProps> = ({
 
   return (
     <div className="flex flex-col gap-6 max-w-4xl mx-auto min-h-screen pb-20">
-      <div className="px-4 sm:px-8 flex flex-col gap-3 py-6 sm:py-10">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-3 rounded-2xl bg-primary/10 text-primary">
-            <Book className="h-6 w-6 sm:h-8 sm:w-8" />
-          </div>
-          <h1 className="text-3xl sm:text-5xl font-black tracking-tight bg-clip-text text-transparent bg-linear-to-br from-foreground to-foreground/70">
-            {lang === "vi" ? "Từ điển Vai trò" : "Role Dictionary"}
-          </h1>
-        </div>
-        <p className="text-muted-foreground text-sm sm:text-lg font-medium leading-relaxed max-w-2xl">
-          {lang === "vi"
-            ? "Tìm hiểu về các nhân vật, phe phái và khả năng đặc biệt của họ."
-            : "Learn about characters, factions, and their special abilities."}
-        </p>
+      <div className="px-4 sm:px-8 py-6 sm:py-10">
+        <PageHeader
+          title={lang === "vi" ? "Từ điển Vai trò" : "Role Dictionary"}
+          subtitle={
+            lang === "vi"
+              ? "Tìm hiểu về các nhân vật, phe phái và khả năng đặc biệt của họ."
+              : "Learn about characters, factions, and their special abilities."
+          }
+          lang={lang}
+          icon={
+            <div className="p-3 rounded-2xl bg-primary/10 text-primary">
+              <Book className="h-6 w-6 sm:h-8 sm:w-8" />
+            </div>
+          }
+        />
       </div>
 
       <div className="sticky top-0 bg-background/80 backdrop-blur-xl z-20 py-4 px-4 sm:px-8 border-b border-border/50">

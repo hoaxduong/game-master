@@ -65,6 +65,7 @@ import {
   Vote,
   Megaphone,
 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { werewolf } from "../i18n";
 
 interface GameDashboardProps {
@@ -259,102 +260,103 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
   ] as string;
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 p-4 sm:p-6 max-w-6xl mx-auto min-h-screen pb-32">
+    <div className="flex flex-col gap-6 sm:gap-8 p-4 sm:p-6 mx-auto min-h-screen pb-32">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 pt-12 sm:pt-0">
-        <div className="flex items-center gap-4">
-          <div
-            className={`p-4 rounded-3xl shadow-lg transition-all duration-500 ${
-              game.phase === "day"
-                ? "bg-amber-100 text-amber-600 shadow-amber-200/50 scale-105 sm:scale-110"
-                : "bg-indigo-900 text-indigo-300 shadow-indigo-900/50 scale-105 sm:scale-110"
-            }`}
-          >
-            {game.phase === "day" ? (
-              <Sun className="h-7 w-7 sm:h-8" />
-            ) : (
-              <Moon className="h-7 w-7 sm:h-8" />
-            )}
-          </div>
-          <div>
-            <h1 className="text-2xl sm:text-4xl font-bold tracking-tight">
-              {phaseLabel} {game.cycle}
-            </h1>
-            <p className="text-muted-foreground font-medium text-xs sm:text-sm">
-              {t["dashboard.session"]}: {sessionId} • {currentStory.villageName}
-            </p>
-          </div>
-        </div>
-        <div className="flex gap-2 w-full sm:w-auto">
-          <AlertDialog open={isResetOpen} onOpenChange={setIsResetOpen}>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                size="lg"
-                className="flex-1 sm:flex-none h-12 sm:h-14 rounded-2xl border-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all font-bold text-sm sm:text-base"
-              >
-                <RotateCcw className="mr-2 h-4 w-4 sm:h-5" />
-                {t["dashboard.newGame"]}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="rounded-3xl border-2 max-w-[90vw] sm:max-w-lg">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-xl sm:text-2xl font-bold">
-                  {t["dashboard.resetConfirm.title"]}
-                </AlertDialogTitle>
-                <AlertDialogDescription className="text-base sm:text-lg">
-                  {t["dashboard.resetConfirm.desc"]}
-                </AlertDialogDescription>
-                <div className="flex items-center space-x-2 pt-4">
-                  <Checkbox
-                    id="keepPlayers"
-                    checked={keepPlayers}
-                    onCheckedChange={(checked: boolean | "indeterminate") =>
-                      setKeepPlayers(checked === true)
-                    }
-                  />
-                  <Label
-                    htmlFor="keepPlayers"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      <div className="pt-4">
+        <PageHeader
+          title={`${phaseLabel} ${game.cycle}`}
+          subtitle={`${t["dashboard.session"]}: ${sessionId} • ${currentStory.villageName}`}
+          lang={lang}
+          icon={
+            <div
+              className={`p-2 sm:p-3 rounded-2xl shadow-lg transition-all duration-500 ${
+                game.phase === "day"
+                  ? "bg-amber-100 text-amber-600 shadow-amber-200/50"
+                  : "bg-indigo-900 text-indigo-300 shadow-indigo-900/50"
+              }`}
+            >
+              {game.phase === "day" ? (
+                <Sun className="h-5 w-5 sm:h-6 sm:w-6" />
+              ) : (
+                <Moon className="h-5 w-5 sm:h-6 sm:w-6" />
+              )}
+            </div>
+          }
+          actions={
+            <div className="flex gap-2">
+              <AlertDialog open={isResetOpen} onOpenChange={setIsResetOpen}>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-10 rounded-full border-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all font-bold"
                   >
-                    {t["dashboard.resetConfirm.keepPlayers"]}
-                  </Label>
-                </div>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="gap-2 sm:gap-0">
-                <AlertDialogCancel
-                  onClick={() => setIsResetOpen(false)}
-                  className="h-12 rounded-xl text-base font-bold"
-                >
-                  {t["dashboard.resetConfirm.cancel"]}
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={() => {
-                    const newGame = resetGame(keepPlayers);
-                    window.location.href = `/${lang}/werewolf/play/${newGame.id}`;
-                  }}
-                  className="h-12 rounded-xl text-base font-bold bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                >
-                  {t["dashboard.resetConfirm.confirm"]}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Button
-            variant="secondary"
-            size="lg"
-            className="flex-1 sm:flex-none h-12 sm:h-14 rounded-2xl border-2 font-bold shadow-lg text-sm sm:text-base"
-            onClick={() =>
-              window.open(
-                `${window.location.protocol}//${window.location.host}${window.location.pathname.startsWith("/vi") ? "/vi" : "/en"}/werewolf/roles`,
-                "_blank",
-              )
-            }
-          >
-            <BookOpen className="mr-2 h-4 w-4 sm:h-5" />
-            Roles
-          </Button>
-        </div>
+                    <RotateCcw className="h-4 w-4" />
+                    <span className="hidden sm:inline">
+                      {t["dashboard.newGame"]}
+                    </span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="rounded-3xl border-2 max-w-[90vw] sm:max-w-lg">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle className="text-xl sm:text-2xl font-bold">
+                      {t["dashboard.resetConfirm.title"]}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="text-base sm:text-lg">
+                      {t["dashboard.resetConfirm.desc"]}
+                    </AlertDialogDescription>
+                    <div className="flex items-center space-x-2 pt-4">
+                      <Checkbox
+                        id="keepPlayers"
+                        checked={keepPlayers}
+                        onCheckedChange={(checked: boolean | "indeterminate") =>
+                          setKeepPlayers(checked === true)
+                        }
+                      />
+                      <Label
+                        htmlFor="keepPlayers"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        {t["dashboard.resetConfirm.keepPlayers"]}
+                      </Label>
+                    </div>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter className="gap-2 sm:gap-0">
+                    <AlertDialogCancel
+                      onClick={() => setIsResetOpen(false)}
+                      className="h-12 rounded-xl text-base font-bold"
+                    >
+                      {t["dashboard.resetConfirm.cancel"]}
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        const newGame = resetGame(keepPlayers);
+                        window.location.href = `/${lang}/werewolf/play/${newGame.id}`;
+                      }}
+                      className="h-12 rounded-xl text-base font-bold bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {t["dashboard.resetConfirm.confirm"]}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button
+                variant="secondary"
+                size="sm"
+                className="h-10 rounded-full border-2 font-bold shadow-sm"
+                onClick={() =>
+                  window.open(
+                    `${window.location.protocol}//${window.location.host}${window.location.pathname.startsWith("/vi") ? "/vi" : "/en"}/werewolf/roles`,
+                    "_blank",
+                  )
+                }
+              >
+                <BookOpen className="h-4 w-4" />
+                <span className="hidden sm:inline">Roles</span>
+              </Button>
+            </div>
+          }
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">

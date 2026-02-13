@@ -38,6 +38,7 @@ import {
   BookOpen, // Added for story icon fallback
   ChevronLeft,
 } from "lucide-react";
+import { PageHeader } from "@/components/PageHeader";
 import { werewolf } from "../i18n";
 
 interface GameSetupProps {
@@ -122,18 +123,14 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 mx-auto min-h-screen pb-32">
-      <div className="px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-16 sm:pt-4">
-        <div className="w-full">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
-              {t["setup.title"]}
-            </h1>
-            <SessionHistorySheet />
-          </div>
-          <p className="text-muted-foreground mt-1 text-base sm:text-lg">
-            {t["setup.subtitle"]}
-          </p>
-        </div>
+      <div className="px-4 sm:px-6 pt-4">
+        <PageHeader
+          title={t["setup.title"]}
+          subtitle={t["setup.subtitle"]}
+          backHref={`/${lang}`}
+          lang={lang}
+          actions={<SessionHistorySheet />}
+        />
       </div>
 
       {/* Story Vibe Picker */}
@@ -149,7 +146,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
           </p>
         </div>
         <div className="overflow-x-auto pb-4">
-          <div className="flex w-max space-x-4 px-4 sm:px-6">
+          <div className="flex w-max space-x-4 py-1 px-4 sm:px-6">
             {STORY_VIBES.map((story) => {
               const isSelected = selectedStoryId === story.id;
               return (
