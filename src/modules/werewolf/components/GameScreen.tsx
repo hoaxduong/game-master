@@ -21,15 +21,33 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   useEffect(() => {
     const init = async () => {
       try {
+        console.log("[GameScreen] Initializing with sessionId:", sessionId);
+        console.log("[GameScreen] Current game.id:", game.id);
+
         // 1. Check auth / auto sign-in
         const session = await authClient.getSession();
+        console.log(
+          "[GameScreen] Auth session:",
+          session.data ? "exists" : "none",
+        );
+
         if (!session.data) {
+          console.log("[GameScreen] Signing in anonymously...");
           await authClient.signIn.anonymous();
         }
 
         // 2. Load game session if ID provided
         if (sessionId && sessionId !== game.id) {
-          await loadSession(sessionId);
+          console.log("[GameScreen] Loading session:", sessionId);
+          const success = await loadSession(sessionId);
+          console.log("[GameScreen] Load session result:", success);
+        } else {
+          console.log(
+            "[GameScreen] Skipping load - sessionId:",
+            sessionId,
+            "game.id:",
+            game.id,
+          );
         }
       } catch (error) {
         console.error("Initialization failed", error);

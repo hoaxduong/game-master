@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { SessionHistorySheet } from "./SessionHistorySheet";
 import { useStore } from "@nanostores/react";
 import {
   $players,
@@ -94,13 +95,13 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
     setEditingName("");
   };
 
-  const handleStartGame = () => {
+  const handleStartGame = async () => {
     if (players.length < 4) {
       alert(t["setup.players.error.min"] || "At least 4 players needed!");
       return;
     }
     try {
-      startGame();
+      await startGame();
       const gameId = $gameSettings.get().id;
       window.location.href = `/${lang}/werewolf/play/${gameId}`;
     } catch (e: any) {
@@ -122,10 +123,13 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
   return (
     <div className="flex flex-col gap-6 sm:gap-8 p-4 sm:p-6 max-w-4xl mx-auto min-h-screen pb-32">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-12 sm:pt-0">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
-            {t["setup.title"]}
-          </h1>
+        <div className="w-full">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
+              {t["setup.title"]}
+            </h1>
+            <SessionHistorySheet />
+          </div>
           <p className="text-muted-foreground mt-1 text-base sm:text-lg">
             {t["setup.subtitle"]}
           </p>
@@ -133,8 +137,8 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
       </div>
 
       {/* Story Vibe Picker */}
-      <section>
-        <div className="mb-4">
+      <section className="-mx-4 sm:-mx-6">
+        <div className="px-4 sm:px-6 mb-4">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-primary" />
             {t["setup.storyVibe"] || "Choose Your Story"}
@@ -144,8 +148,8 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
               "Set the atmosphere for your village."}
           </p>
         </div>
-        <div className="w-full overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
-          <div className="flex w-max space-x-4 p-1">
+        <div className="overflow-x-auto pb-4">
+          <div className="flex w-max space-x-4 px-4 sm:px-6">
             {STORY_VIBES.map((story) => {
               const isSelected = selectedStoryId === story.id;
               return (

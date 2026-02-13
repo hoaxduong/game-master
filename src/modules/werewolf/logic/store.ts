@@ -155,7 +155,7 @@ export const setStoryVibe = (storyId: string) => {
   $selectedStoryId.set(storyId);
 };
 
-export const startGame = () => {
+export const startGame = async () => {
   const players = $players.get();
   const selectedRoles = $selectedRoleIds.get();
 
@@ -189,6 +189,18 @@ export const startGame = () => {
   $gameSettings.setKey("cycle", 1);
   $gameSettings.setKey("phase", "night");
   $gameSettings.setKey("phaseStepIndex", 0);
+
+  // Immediately save to API to prevent race condition on redirect
+  await saveSessionToApi({
+    settings: $gameSettings.get(),
+    players: $players.get(),
+    roles: $selectedRoleIds.get(),
+    targets: $selectedTargets.get(),
+    lovers: $lovers.get(),
+    witchPotions: $witchPotions.get(),
+    hunterPendingShot: $hunterPendingShot.get(),
+    storyId: $selectedStoryId.get(),
+  });
 };
 
 export const toggleTarget = (stepId: string, playerId: string) => {
@@ -315,10 +327,22 @@ export const setPhaseStepIndex = (index: number) => {
 };
 
 export const loadSession = async (sessionId: string) => {
+  console.log("[store] loadSession called with:", sessionId);
   const session = await loadSessionFromApi(sessionId);
+  console.log(
+    "[store] loadSessionFromApi returned:",
+    session ? "data" : "null",
+  );
+
   if (session) {
     try {
       const data = session;
+      console.log("[store] Session data:", {
+        settings: data.settings,
+        playersCount: data.players?.length,
+        rolesCount: data.roles?.length,
+      });
+
       // Batch updates
       $players.set(data.players || []);
       $selectedRoleIds.set(data.roles || ["villager", "werewolf"]);
@@ -333,11 +357,17 @@ export const loadSession = async (sessionId: string) => {
         ...data.settings,
         id: sessionId, // Ensure ID matches URL
       });
+
+      console.log(
+        "[store] Session loaded successfully, new settings:",
+        $gameSettings.get(),
+      );
       return true;
     } catch (e) {
       console.error("Failed to parse session", e);
       return false;
     }
   }
+  console.log("[store] No session data found");
   return false;
 };
