@@ -14,6 +14,7 @@ import {
   $hunterPendingShot,
   $lovers,
   resolveHunterShot,
+  $selectedStoryId,
 } from "../logic/store";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { WEREWOLF_ROLES, type WerewolfRole } from "../types/roles";
+import { STORY_VIBES } from "../types/stories";
 import {
   Sheet,
   SheetContent,
@@ -74,6 +76,9 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
 }) => {
   const game = useStore($gameSettings);
   const players = useStore($players);
+  const selectedStoryId = useStore($selectedStoryId);
+  const currentStory =
+    STORY_VIBES.find((s) => s.id === selectedStoryId) || STORY_VIBES[0];
   const t = werewolf[lang];
 
   const [isResetOpen, setIsResetOpen] = React.useState(false);
@@ -197,6 +202,16 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
   };
 
   const getStepDescription = (step: PhaseStep) => {
+    // Story-specific narrator overrides
+    if (step.id === "night-sleep" && currentStory.nightText) {
+      const storyText = t[currentStory.nightText as keyof typeof t];
+      if (storyText) return storyText;
+    }
+    if (step.id === "night-wake" && currentStory.dayText) {
+      const storyText = t[currentStory.dayText as keyof typeof t];
+      if (storyText) return storyText;
+    }
+
     // For role actions, use the role-specific nightAction translation
     if (step.type === "role_action" && step.roleId) {
       const actionKey = `role.${step.roleId}.nightAction` as keyof typeof t;
@@ -266,7 +281,7 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
               {phaseLabel} {game.cycle}
             </h1>
             <p className="text-muted-foreground font-medium text-xs sm:text-sm">
-              Session: {sessionId}
+              {t["dashboard.session"]}: {sessionId} • {currentStory.villageName}
             </p>
           </div>
         </div>

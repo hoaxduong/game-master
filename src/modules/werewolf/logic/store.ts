@@ -34,6 +34,7 @@ export const $witchPotions = map<{ life: boolean; death: boolean }>({
   death: true,
 });
 export const $hunterPendingShot = atom<string | null>(null);
+export const $selectedStoryId = atom<string>("classic");
 
 // Persistence keys
 const STORAGE_PREFIX = "werewolf_session_";
@@ -51,6 +52,7 @@ onMount($gameSettings, () => {
         lovers: $lovers.get(),
         witchPotions: $witchPotions.get(),
         hunterPendingShot: $hunterPendingShot.get(),
+        storyId: $selectedStoryId.get(),
       }),
     );
   };
@@ -62,6 +64,7 @@ onMount($gameSettings, () => {
   const unsubscribeLovers = $lovers.listen(save);
   const unsubscribeWitch = $witchPotions.listen(save);
   const unsubscribeHunter = $hunterPendingShot.listen(save);
+  const unsubscribeStory = $selectedStoryId.listen(save);
 
   return () => {
     unsubscribeSettings();
@@ -71,6 +74,7 @@ onMount($gameSettings, () => {
     unsubscribeLovers();
     unsubscribeWitch();
     unsubscribeHunter();
+    unsubscribeStory();
   };
 });
 
@@ -133,6 +137,10 @@ export const removeRole = (roleId: string) => {
     next.splice(index, 1);
     $selectedRoleIds.set(next);
   }
+};
+
+export const setStoryVibe = (storyId: string) => {
+  $selectedStoryId.set(storyId);
 };
 
 export const startGame = () => {
@@ -223,6 +231,7 @@ export const resetGame = (keepPlayers: boolean = false) => {
         lovers: [],
         witchPotions: { life: true, death: true },
         hunterPendingShot: null,
+        storyId: $selectedStoryId.get(),
       }),
     );
   }
@@ -315,6 +324,7 @@ export const loadSession = (id: string) => {
     $lovers.set(parsed.lovers || []);
     $witchPotions.set(parsed.witchPotions || { life: true, death: true });
     $hunterPendingShot.set(parsed.hunterPendingShot || null);
+    $selectedStoryId.set(parsed.storyId || "classic");
     return true;
   }
   return false;

@@ -13,9 +13,12 @@ import {
   generatePlayers,
   updatePlayerName,
   updatePlayerRole,
+  $selectedStoryId,
+  setStoryVibe,
 } from "../logic/store";
 import { suggestRoles } from "../logic/suggestRoles";
 import { WEREWOLF_ROLES, type WerewolfRole } from "../types/roles";
+import { STORY_VIBES } from "../types/stories";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,6 +34,8 @@ import {
   Check,
   X,
   Minus,
+  BookOpen, // Added for story icon fallback
+  ChevronLeft,
 } from "lucide-react";
 import { werewolf } from "../i18n";
 
@@ -41,6 +46,7 @@ interface GameSetupProps {
 export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
   const players = useStore($players);
   const selectedRoleIds = useStore($selectedRoleIds);
+  const selectedStoryId = useStore($selectedStoryId);
   const [newPlayerName, setNewPlayerName] = useState("");
   const [generateCount, setGenerateCount] = useState<number>(4);
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
@@ -90,7 +96,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
 
   const handleStartGame = () => {
     if (players.length < 4) {
-      alert("At least 4 players needed for a fun game!");
+      alert(t["setup.players.error.min"] || "At least 4 players needed!");
       return;
     }
     try {
@@ -104,7 +110,9 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
 
   const handleSuggestRoles = () => {
     if (players.length < 4) {
-      alert("Suggestions work best with 4+ players");
+      alert(
+        t["setup.players.error.min"] || "Suggestions work best with 4+ players",
+      );
       return;
     }
     const suggested = suggestRoles(players.length);
@@ -124,6 +132,63 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
         </div>
       </div>
 
+      {/* Story Vibe Picker */}
+      <section>
+        <div className="mb-4">
+          <h2 className="text-xl font-bold flex items-center gap-2">
+            <BookOpen className="h-5 w-5 text-primary" />
+            {t["setup.storyVibe"] || "Choose Your Story"}
+          </h2>
+          <p className="text-muted-foreground text-sm">
+            {t["setup.storyVibe.subtitle"] ||
+              "Set the atmosphere for your village."}
+          </p>
+        </div>
+        <div className="w-full overflow-x-auto pb-4 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <div className="flex w-max space-x-4 p-1">
+            {STORY_VIBES.map((story) => {
+              const isSelected = selectedStoryId === story.id;
+              return (
+                <button
+                  key={story.id}
+                  onClick={() => setStoryVibe(story.id)}
+                  className={`
+                    const transition-all duration-200 ease-in-out
+                    relative flex flex-col items-start justify-between gap-3 rounded-2xl border-2 p-5 text-left
+                    w-72 min-h-[180px] hover:scale-[1.02] active:scale-[0.98]
+                    ${
+                      isSelected
+                        ? "border-primary bg-primary/5 shadow-lg shadow-primary/10 ring-2 ring-primary/20"
+                        : "border-muted bg-card hover:border-primary/50 hover:shadow-md"
+                    }
+                  `}
+                >
+                  <div className="text-3xl mb-1">{story.icon}</div>
+                  <div>
+                    <div className="font-bold text-base flex items-center gap-2">
+                      {t[`story.${story.id}.name` as keyof typeof t] ||
+                        story.name}
+                      {isSelected && (
+                        <Badge
+                          variant="secondary"
+                          className="h-5 px-1.5 text-[10px] bg-primary/10 text-primary"
+                        >
+                          <Check className="h-3 w-3" />
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground whitespace-normal leading-relaxed">
+                      {t[`story.${story.id}.desc` as keyof typeof t] ||
+                        story.description}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         {/* Players Section */}
         <Card className="flex flex-col border-2 shadow-xl shadow-primary/5 overflow-hidden rounded-3xl">
@@ -136,7 +201,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
             </div>
             <form onSubmit={handleAddPlayer} className="flex gap-2 mt-4">
               <Input
-                placeholder="Name..."
+                placeholder={t["setup.players.placeholder"]}
                 value={newPlayerName}
                 onChange={(e) => setNewPlayerName(e.target.value)}
                 className="bg-card border-2 h-12 rounded-xl focus-visible:ring-primary"
@@ -336,6 +401,18 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
         >
           <Play className="mr-3 h-7 w-7 fill-current" />
           {t["setup.startGame"]}
+        </Button>
+      </div>
+
+      <div className="fixed bottom-6 left-6 z-50">
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full shadow-lg h-12 w-12 bg-background/80 backdrop-blur-sm border-2"
+          onClick={() => (window.location.href = `/${lang}/werewolf`)}
+        >
+          <span className="sr-only">{t["setup.back"] || "Back"}</span>
+          <ChevronLeft className="h-6 w-6" />
         </Button>
       </div>
     </div>

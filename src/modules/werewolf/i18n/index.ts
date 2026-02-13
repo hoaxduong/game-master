@@ -38,9 +38,14 @@ export const werewolf = {
     "setup.rolePool": "Role Pool",
     "setup.suggestRoles": "Suggest Roles",
     "setup.startGame": "Start Game",
+    "setup.back": "Back",
+    "setup.players.error.min": "At least 4 players needed for a fun game!",
+    "setup.players.placeholder": "Name...",
+    "setup.players.add": "Add Player",
     "dashboard.phase.day": "Day",
     "dashboard.phase.night": "Night",
     "dashboard.villageStatus": "Village Status",
+    "dashboard.session": "Session",
     "dashboard.alive": "Alive",
     "narrator.night":
       "Everyone, close your eyes. Werewolves, wake up and choose your victim...",
@@ -103,6 +108,56 @@ export const werewolf = {
     "role.witch.potions": "Potions",
     "role.witch.potion.life": "Life",
     "role.witch.potion.death": "Death",
+
+    // Story Vibes
+    "story.classic.name": "Classic",
+    "story.classic.desc":
+      "The traditional werewolf experience in a quiet, cursed village.",
+    "story.medieval.name": "Medieval",
+    "story.medieval.desc":
+      "A dark age of knights and castles where beasts roam.",
+    "story.haunted.name": "Haunted",
+    "story.haunted.desc":
+      "An abandoned ghost town where spirits are not the only threat.",
+    "story.pirate.name": "Pirate",
+    "story.pirate.desc":
+      "A misty cove where smugglers hide and something darker lurks.",
+    "story.folklore.name": "Vn Folklore",
+    "story.folklore.desc":
+      "A mythical Vietnamese village under the light of a blood moon.",
+
+    "setup.storyVibe": "Choose Your Story",
+    "setup.storyVibe.subtitle": "Set the atmosphere for your village.",
+    "narrator.intro.classic":
+      "Welcome to Ravenhollow. The moon is full, and the wolves are hungry...",
+    "narrator.night.classic":
+      "Night falls on Ravenhollow. The villagers sleep, but the beasts awake...",
+    "narrator.day.classic":
+      "The sun rises over the quiet village. Who survived the night?",
+    "narrator.intro.medieval":
+      "Ye find yerself in Ironkeep. The King is dead, and dark magic is afoot.",
+    "narrator.night.medieval":
+      "Darkness shrouds the castle walls. The ancient evil stirs...",
+    "narrator.day.medieval":
+      "The horn sounds! The castle gates open to reveal the night's toll.",
+    "narrator.intro.haunted":
+      "Welcome to Hollowshade. The mist here never lifts, and the dead don't rest.",
+    "narrator.night.haunted":
+      "The fog thickens. The spirits whisper, and something darker hunts...",
+    "narrator.day.haunted":
+      "The gray morning light reveals the horrors of the darkness.",
+    "narrator.intro.pirate":
+      "Welcome to Blacktide Bay! Keep yer gold close and yer cutlass closer.",
+    "narrator.night.pirate":
+      "The tide rolls in, hiding the screams. The deep sea monsters rise...",
+    "narrator.day.pirate":
+      "Sun's up, ye scurvy dogs! Let's see who's still kickin'.",
+    "narrator.intro.vn_folklore":
+      "Welcome to Crescent Moon Village. The banyan tree whispers ancient tales...",
+    "narrator.night.vn_folklore":
+      "Darkness covers the silent village. A knock echoes in the dead of night...",
+    "narrator.day.vn_folklore":
+      "The rooster crows, breaking the night. What truth will be revealed?",
   },
   vi: {
     "role.villager.name": "Dân làng",
@@ -140,9 +195,14 @@ export const werewolf = {
     "setup.rolePool": "Kho Vai Trò",
     "setup.suggestRoles": "Gợi ý vai trò",
     "setup.startGame": "Bắt đầu",
+    "setup.back": "Quay lại",
+    "setup.players.error.min": "Cần ít nhất 4 người chơi!",
+    "setup.players.placeholder": "Tên...",
+    "setup.players.add": "Thêm",
     "dashboard.phase.day": "Ban Ngày",
     "dashboard.phase.night": "Ban Đêm",
     "dashboard.villageStatus": "Tình trạng Làng",
+    "dashboard.session": "Phiên",
     "dashboard.alive": "Còn sống",
     "narrator.night":
       "Tất cả nhắm mắt lại. Ma sói, hãy thức dậy và chọn nạn nhân...",
@@ -204,5 +264,55 @@ export const werewolf = {
     "role.witch.potions": "Bình thuốc",
     "role.witch.potion.life": "Cứu sống",
     "role.witch.potion.death": "Giết chết",
+
+    // Story Vibes
+    "story.classic.name": "Cổ Điển",
+    "story.classic.desc":
+      "Trải nghiệm ma sói truyền thống tại một ngôi làng yên tĩnh nhưng bị nguyền rủa.",
+    "story.medieval.name": "Trung Cổ",
+    "story.medieval.desc":
+      "Thời kỳ đen tối của các hiệp sĩ và lâu đài, nơi quái thú lộng hành.",
+    "story.haunted.name": "Bị Ám",
+    "story.haunted.desc":
+      "Một thị trấn ma bỏ hoang nơi những linh hồn không phải là mối đe dọa duy nhất.",
+    "story.pirate.name": "Cướp Biển",
+    "story.pirate.desc":
+      "Một vịnh sương mù nơi những kẻ buôn lậu ẩn náu và thứ gì đó đen tối hơn đang rình rập.",
+    "story.folklore.name": "Dân Gian VN",
+    "story.folklore.desc":
+      "Một ngôi làng Việt Nam huyền bí dưới ánh trăng máu.",
+
+    "setup.storyVibe": "Chọn Cốt Truyện",
+    "setup.storyVibe.subtitle": "Tạo không khí cho ngôi làng của bạn.",
+    "narrator.intro.classic":
+      "Chào mừng đến Ravenhollow. Trăng tròn đã lên, và bầy sói đang đói...",
+    "narrator.night.classic":
+      "Bóng đêm buông xuống Ravenhollow. Dân làng chìm vào giấc ngủ...",
+    "narrator.day.classic":
+      "Mặt trời mọc trên ngôi làng yên tĩnh. Ai đã sống sót qua đêm nay?",
+    "narrator.intro.medieval":
+      "Bạn đang ở Ironkeep. Nhà vua đã băng hà, và ma thuật hắc ám đang trỗi dậy.",
+    "narrator.night.medieval":
+      "Bóng tối bao trùm tường thành. Ác quỷ cổ xưa đang thức tỉnh...",
+    "narrator.day.medieval":
+      "Tiếng tù và vang lên! Cổng thành mở ra để lộ kết quả của đêm qua.",
+    "narrator.intro.haunted":
+      "Chào mừng đến Hollowshade. Sương mù ở đây không bao giờ tan...",
+    "narrator.night.haunted":
+      "Sương mù dày đặc hơn. Những linh hồn thì thầm...",
+    "narrator.day.haunted":
+      "Ánh sáng buổi sáng xám xịt hé lộ nỗi kinh hoàng của bóng tối.",
+    "narrator.intro.pirate":
+      "Chào mừng đến Vịnh Hắc Triều! Giữ chặt vàng và thanh gươm của người.",
+    "narrator.night.pirate":
+      "Thủy triều cuộn trào, che giấu những tiếng la hét...",
+    "narrator.day.pirate":
+      "Mặt trời lên rồi, lũ chuột cống! Xem ai còn sống nào.",
+    "narrator.intro.vn_folklore":
+      "Chào mừng đến Làng Trăng Khuyết. Cây đa đầu làng rì rào kể chuyện...",
+    "narrator.night.vn_folklore":
+      "Bóng đêm bao trùm không gian tịch mịch. Tiếng gõ cửa vang lên giữa đêm khuya...",
+    "narrator.day.vn_folklore":
+      "Tiếng gà gáy sáng phá tan màn đêm. Sự thật nào sẽ được phơi bày?",
   },
 } as const;
