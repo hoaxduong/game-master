@@ -1,6 +1,7 @@
 import { atom, map, onMount } from "nanostores";
 import type { WerewolfRole } from "../types/roles";
 import { calculateNightResults } from "./nightResult";
+import { saveSessionToApi, loadSessionFromApi } from "./session-api";
 
 export interface Player {
   id: string;
@@ -16,6 +17,17 @@ export interface GameSettings {
   phase: "day" | "night";
   cycle: number;
   phaseStepIndex: number;
+}
+
+export interface WerewolfState {
+  settings: GameSettings;
+  players: Player[];
+  roles: string[];
+  targets: Record<string, string[]>;
+  lovers: string[];
+  witchPotions: { life: boolean; death: boolean };
+  hunterPendingShot: string | null;
+  storyId: string;
 }
 
 // Stores
@@ -36,15 +48,15 @@ export const $witchPotions = map<{ life: boolean; death: boolean }>({
 export const $hunterPendingShot = atom<string | null>(null);
 export const $selectedStoryId = atom<string>("classic");
 
-// Persistence keys
-const STORAGE_PREFIX = "werewolf_session_";
+// Persistence debounce timer
+let saveTimer: ReturnType<typeof setTimeout>;
 
 // Persistence setup
 onMount($gameSettings, () => {
   const save = () => {
-    localStorage.setItem(
-      `${STORAGE_PREFIX}${$gameSettings.get().id}`,
-      JSON.stringify({
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      saveSessionToApi({
         settings: $gameSettings.get(),
         players: $players.get(),
         roles: $selectedRoleIds.get(),
@@ -53,8 +65,8 @@ onMount($gameSettings, () => {
         witchPotions: $witchPotions.get(),
         hunterPendingShot: $hunterPendingShot.get(),
         storyId: $selectedStoryId.get(),
-      }),
-    );
+      });
+    }, 1000); // Debounce 1s
   };
 
   const unsubscribeSettings = $gameSettings.listen(save);
@@ -192,51 +204,40 @@ export const toggleTarget = (stepId: string, playerId: string) => {
   }
 };
 
-export const resetGame = (keepPlayers: boolean = false) => {
+export const resetGame = () => {
+  // Generate new ID for next game
   const newId = crypto.randomUUID();
-  const newSettings: GameSettings = {
+
+  $gameSettings.set({
     id: newId,
     status: "setup",
     phase: "night",
     cycle: 0,
     phaseStepIndex: 0,
-  };
+  });
 
-  const currentPlayers = $players.get();
-  const nextPlayers = keepPlayers
-    ? currentPlayers.map((p) => ({
-        ...p,
-        roleId: undefined,
-        isAlive: true,
-        notes: "",
-      }))
-    : [];
-
-  // Update stores
-  $gameSettings.set(newSettings);
-  $players.set(nextPlayers);
+  // Reset players to empty
+  $players.set([]);
   $selectedTargets.set({});
   $lovers.set([]);
   $witchPotions.set({ life: true, death: true });
   $hunterPendingShot.set(null);
+  $selectedRoleIds.set(["villager", "werewolf"]); // Reset to default roles
+  $selectedStoryId.set("classic"); // Reset to default story
 
-  // Explicitly save to localStorage to ensure it's there before redirect
-  if (typeof window !== "undefined") {
-    localStorage.setItem(
-      `${STORAGE_PREFIX}${newId}`,
-      JSON.stringify({
-        settings: newSettings,
-        players: nextPlayers,
-        roles: $selectedRoleIds.get(),
-        lovers: [],
-        witchPotions: { life: true, death: true },
-        hunterPendingShot: null,
-        storyId: $selectedStoryId.get(),
-      }),
-    );
-  }
+  // Save the new session state to the API
+  saveSessionToApi({
+    settings: $gameSettings.get(),
+    players: $players.get(),
+    roles: $selectedRoleIds.get(),
+    targets: $selectedTargets.get(),
+    lovers: $lovers.get(),
+    witchPotions: $witchPotions.get(),
+    hunterPendingShot: $hunterPendingShot.get(),
+    storyId: $selectedStoryId.get(),
+  });
 
-  return newSettings;
+  return $gameSettings.get();
 };
 
 export const advancePhase = () => {
@@ -313,19 +314,30 @@ export const setPhaseStepIndex = (index: number) => {
   $gameSettings.setKey("phaseStepIndex", index);
 };
 
-export const loadSession = (id: string) => {
-  const data = localStorage.getItem(`${STORAGE_PREFIX}${id}`);
-  if (data) {
-    const parsed = JSON.parse(data);
-    $gameSettings.set(parsed.settings);
-    $players.set(parsed.players);
-    $selectedRoleIds.set(parsed.roles);
-    $selectedTargets.set(parsed.targets || {});
-    $lovers.set(parsed.lovers || []);
-    $witchPotions.set(parsed.witchPotions || { life: true, death: true });
-    $hunterPendingShot.set(parsed.hunterPendingShot || null);
-    $selectedStoryId.set(parsed.storyId || "classic");
-    return true;
+export const loadSession = async (sessionId: string) => {
+  const session = await loadSessionFromApi(sessionId);
+  if (session) {
+    try {
+      const data = session;
+      // Batch updates
+      $players.set(data.players || []);
+      $selectedRoleIds.set(data.roles || ["villager", "werewolf"]);
+      $selectedTargets.set(data.targets || {});
+      $lovers.set(data.lovers || []);
+      $witchPotions.set(data.witchPotions || { life: true, death: true });
+      $hunterPendingShot.set(data.hunterPendingShot || null);
+      $selectedStoryId.set(data.storyId || "classic");
+
+      // Update settings last to trigger UI update
+      $gameSettings.set({
+        ...data.settings,
+        id: sessionId, // Ensure ID matches URL
+      });
+      return true;
+    } catch (e) {
+      console.error("Failed to parse session", e);
+      return false;
+    }
   }
   return false;
 };

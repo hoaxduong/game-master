@@ -1,0 +1,8 @@
+name = "game-master"
+compatibility_date = "2024-09-23"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "game-master"
+database_id = "b595023d-a463-4031-ab74-22ce8004cbca"

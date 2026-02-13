@@ -51,7 +51,18 @@ A modern web application for managing party games, with a primary focus on the p
    pnpm dev
    ```
 
-4. **Open the app:**
+4. **Configure Environment Variables:**
+   Copy `.env.example` to `.env` and fill in the required values:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   - `BETTER_AUTH_SECRET`: Generate a random string (e.g. `openssl rand -hex 32`).
+   - `BETTER_AUTH_URL`: Set to your app's URL (default `http://localhost:4321` for dev).
+   - Cloudflare credentials if needed for local D1 access.
+
+5. **Open the app:**
    Navigate to `http://localhost:4321` in your browser.
 
 ## Database Management
