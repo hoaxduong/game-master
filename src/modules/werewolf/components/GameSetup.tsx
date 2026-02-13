@@ -121,8 +121,8 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
   };
 
   return (
-    <div className="flex flex-col gap-6 sm:gap-8 p-4 sm:p-6 max-w-4xl mx-auto min-h-screen pb-32">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-12 sm:pt-0">
+    <div className="flex flex-col gap-6 sm:gap-8 mx-auto min-h-screen pb-32">
+      <div className="px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-16 sm:pt-0">
         <div className="w-full">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
@@ -137,7 +137,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
       </div>
 
       {/* Story Vibe Picker */}
-      <section className="-mx-4 sm:-mx-6">
+      <section>
         <div className="px-4 sm:px-6 mb-4">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-primary" />
@@ -193,7 +193,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
         </div>
       </section>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+      <div className="px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         {/* Players Section */}
         <Card className="flex flex-col border-2 shadow-xl shadow-primary/5 overflow-hidden rounded-3xl">
           <CardHeader className="border-b bg-linear-to-b from-primary/10 via-primary/5 to-transparent pb-4">
@@ -396,7 +396,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
         </Card>
       </div>
 
-      <div className="flex justify-center pt-8 pb-12">
+      <div className="px-4 sm:px-6 flex justify-center pt-8 pb-12">
         <Button
           size="lg"
           onClick={handleStartGame}
@@ -405,18 +405,6 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
         >
           <Play className="mr-3 h-7 w-7 fill-current" />
           {t["setup.startGame"]}
-        </Button>
-      </div>
-
-      <div className="fixed bottom-6 left-6 z-50">
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full shadow-lg h-12 w-12 bg-background/80 backdrop-blur-sm border-2"
-          onClick={() => (window.location.href = `/${lang}/werewolf`)}
-        >
-          <span className="sr-only">{t["setup.back"] || "Back"}</span>
-          <ChevronLeft className="h-6 w-6" />
         </Button>
       </div>
     </div>

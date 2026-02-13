@@ -67,8 +67,8 @@ export const RoleDictionary: React.FC<RoleDictionaryProps> = ({
   };
 
   return (
-    <div className="flex flex-col gap-6 p-4 sm:p-8 max-w-4xl mx-auto min-h-screen pb-20">
-      <div className="flex flex-col gap-3 py-6 sm:py-10">
+    <div className="flex flex-col gap-6 max-w-4xl mx-auto min-h-screen pb-20">
+      <div className="px-4 sm:px-8 flex flex-col gap-3 py-6 sm:py-10">
         <div className="flex items-center gap-3 mb-2">
           <div className="p-3 rounded-2xl bg-primary/10 text-primary">
             <Book className="h-6 w-6 sm:h-8 sm:w-8" />
@@ -84,7 +84,7 @@ export const RoleDictionary: React.FC<RoleDictionaryProps> = ({
         </p>
       </div>
 
-      <div className="sticky top-0 bg-background/80 backdrop-blur-xl z-20 py-4 -mx-4 px-4 border-b border-border/50">
+      <div className="sticky top-0 bg-background/80 backdrop-blur-xl z-20 py-4 px-4 sm:px-8 border-b border-border/50">
         <div className="relative group max-w-2xl">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
           <Input
@@ -98,7 +98,7 @@ export const RoleDictionary: React.FC<RoleDictionaryProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-4">
+      <div className="px-4 sm:px-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mt-4">
         {filteredRoles.length > 0 ? (
           filteredRoles
             .sort((a, b) => a.faction.localeCompare(b.faction))
