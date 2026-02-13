@@ -122,7 +122,7 @@ export const GameSetup: React.FC<GameSetupProps> = ({ lang = "en" }) => {
 
   return (
     <div className="flex flex-col gap-6 sm:gap-8 mx-auto min-h-screen pb-32">
-      <div className="px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-16 sm:pt-0">
+      <div className="px-4 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 pt-16 sm:pt-4">
         <div className="w-full">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-linear-to-r from-primary via-primary to-primary/60 bg-clip-text text-transparent">
