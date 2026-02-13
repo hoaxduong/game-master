@@ -15,6 +15,8 @@ export const ui = {
     "common.ready": "Ready",
     "common.premium": "Premium UI",
     "common.comingSoon": "Coming Soon",
+    "footer.copyright": "© 2026 Game Master. All rights reserved.",
+    "footer.opensource": "Open source project on GitHub",
   },
   vi: {
     "nav.home": "Trang chủ",
@@ -25,5 +27,7 @@ export const ui = {
     "common.ready": "Sẵn sàng",
     "common.premium": "Giao diện VIP",
     "common.comingSoon": "Sắp ra mắt",
+    "footer.copyright": "© 2024 Quản Trò. Bảo lưu mọi quyền.",
+    "footer.opensource": "Dự án mã nguồn mở trên GitHub",
   },
 } as const;
