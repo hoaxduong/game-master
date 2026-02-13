@@ -8,6 +8,8 @@ export interface WerewolfRole {
   nightAction?: string;
   priority: number; // For narrator order
   image?: string;
+  maxTargets?: number;
+  isFirstNightOnly?: boolean;
 }
 
 export const WEREWOLF_ROLES: WerewolfRole[] = [
@@ -26,6 +28,7 @@ export const WEREWOLF_ROLES: WerewolfRole[] = [
     description: "Each night, the werewolves choose a player to kill.",
     nightAction: "Choose a player to eliminate.",
     priority: 10,
+    maxTargets: 1,
   },
   {
     id: "seer",
@@ -35,6 +38,7 @@ export const WEREWOLF_ROLES: WerewolfRole[] = [
       "Each night, the Seer can check a player to see if they are a werewolf.",
     nightAction: "Check if a player is a Werewolf.",
     priority: 20,
+    maxTargets: 1,
   },
   {
     id: "doctor",
@@ -44,6 +48,7 @@ export const WEREWOLF_ROLES: WerewolfRole[] = [
       "Each night, the Doctor can choose one player to save from being killed.",
     nightAction: "Choose a player to protect.",
     priority: 30,
+    maxTargets: 1,
   },
   {
     id: "hunter",
@@ -61,6 +66,8 @@ export const WEREWOLF_ROLES: WerewolfRole[] = [
       'On the first night, Cupid chooses two players to be "Lovers". If one dies, the other dies too.',
     nightAction: "Choose two players to fall in love.",
     priority: 5,
+    maxTargets: 2,
+    isFirstNightOnly: true,
   },
   {
     id: "witch",
@@ -70,5 +77,6 @@ export const WEREWOLF_ROLES: WerewolfRole[] = [
       "The Witch has two potions: one to save and one to kill. They can use each only once per game.",
     nightAction: "Decide whether to use the potion of life or death.",
     priority: 25,
+    maxTargets: 1,
   },
 ];

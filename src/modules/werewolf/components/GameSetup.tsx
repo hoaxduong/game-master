@@ -12,6 +12,7 @@ import {
   $gameSettings,
   generatePlayers,
   updatePlayerName,
+  updatePlayerRole,
 } from "../logic/store";
 import { suggestRoles } from "../logic/suggestRoles";
 import { WEREWOLF_ROLES, type WerewolfRole } from "../types/roles";

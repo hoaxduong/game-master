@@ -19,7 +19,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     if (sessionId && sessionId !== game.id) {
       loadSession(sessionId);
     }
-  }, [sessionId]);
+  }, [sessionId, game.id]);
 
   if (game.status === "setup") {
     return <GameSetup lang={lang} />;
