@@ -98,6 +98,8 @@ export const werewolf = {
     "phase.roleAction.activePlayers": "Active Players",
     "phase.roleAction.targets": "Targets",
     "phase.roleAction.selected": "Selected",
+    "phase.roleAction.deadRole":
+      "This role is no longer alive. Pretend to act as usual.",
     "phase.night.summary": "Night Summary",
     "phase.night.summary.eliminated": "Eliminated:",
     "phase.night.summary.survived": "Everyone survived!",
@@ -261,6 +263,8 @@ export const werewolf = {
     "phase.roleAction.activePlayers": "Người chơi hoạt động",
     "phase.roleAction.targets": "Mục tiêu",
     "phase.roleAction.selected": "Đã chọn",
+    "phase.roleAction.deadRole":
+      "Vai trò này đã chết. Hãy giả vờ hành động như bình thường.",
     "phase.night.summary": "Tổng kết Ban đêm",
     "phase.night.summary.eliminated": "Bị loại:",
     "phase.night.summary.survived": "Mọi người đều sống sót!",

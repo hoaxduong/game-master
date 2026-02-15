@@ -18,6 +18,7 @@ export interface PhaseStep {
   playerIds: string[]; // players involved in this step
   targetCount?: number; // expected number of players for this step (e.g. mapping)
   maxTargets?: number; // max targets allowed for action
+  isDeadRole?: boolean; // true if the role's player(s) are dead — step is still shown to prevent meta-gaming
 }
 
 type Lang = "en" | "vi";
@@ -65,15 +66,25 @@ export function getNightSteps(
     playerIds: [],
   });
 
-  // 3. Collect night-active roles from alive players
+  // 3. Collect night-active roles from ALL players (alive or dead) to prevent meta-gaming
   const rolePlayerMap = new Map<string, Player[]>();
+  const deadRoleIds = new Set<string>();
   for (const player of players) {
-    if (!player.isAlive || !player.roleId) continue;
+    if (!player.roleId) continue;
     const role = WEREWOLF_ROLES.find((r) => r.id === player.roleId);
     if (!role?.nightAction) continue;
 
     // Cupid only wakes on night 1
     if (role.id === "cupid" && cycle !== 1) continue;
+
+    if (!player.isAlive) {
+      deadRoleIds.add(role.id);
+      // Still register the role so it appears in sortedRoles
+      if (!rolePlayerMap.has(role.id)) {
+        rolePlayerMap.set(role.id, []);
+      }
+      continue;
+    }
 
     const existing = rolePlayerMap.get(role.id) || [];
     existing.push(player);
@@ -88,30 +99,45 @@ export function getNightSteps(
   // 4. One step per role (Active actions)
   for (const role of sortedRoles) {
     const rolePlayers = rolePlayerMap.get(role.id) || [];
+    const allDead = rolePlayers.length === 0 && deadRoleIds.has(role.id);
 
     if (role.id === "witch") {
-      // Witch specific: split into two steps if potions available
-      if (witchPotions?.life) {
+      if (allDead) {
+        // Witch is dead — add a single dummy step
         steps.push({
           id: `night-witch-save`,
           roleId: role.id,
           type: "role_action",
           titleKey: "phase.night.roleWake",
           descriptionKey: `role.witch.nightAction.save`,
-          playerIds: rolePlayers.map((p) => p.id),
+          playerIds: [],
           maxTargets: 1,
+          isDeadRole: true,
         });
-      }
-      if (witchPotions?.death) {
-        steps.push({
-          id: `night-witch-kill`,
-          roleId: role.id,
-          type: "role_action",
-          titleKey: "phase.night.roleWake",
-          descriptionKey: `role.witch.nightAction.kill`,
-          playerIds: rolePlayers.map((p) => p.id),
-          maxTargets: 1,
-        });
+      } else {
+        // Witch specific: split into two steps if potions available
+        if (witchPotions?.life) {
+          steps.push({
+            id: `night-witch-save`,
+            roleId: role.id,
+            type: "role_action",
+            titleKey: "phase.night.roleWake",
+            descriptionKey: `role.witch.nightAction.save`,
+            playerIds: rolePlayers.map((p) => p.id),
+            maxTargets: 1,
+          });
+        }
+        if (witchPotions?.death) {
+          steps.push({
+            id: `night-witch-kill`,
+            roleId: role.id,
+            type: "role_action",
+            titleKey: "phase.night.roleWake",
+            descriptionKey: `role.witch.nightAction.kill`,
+            playerIds: rolePlayers.map((p) => p.id),
+            maxTargets: 1,
+          });
+        }
       }
     } else {
       steps.push({
@@ -120,8 +146,9 @@ export function getNightSteps(
         type: "role_action",
         titleKey: "phase.night.roleWake",
         descriptionKey: `role.${role.id}.nightAction`,
-        playerIds: rolePlayers.map((p) => p.id),
+        playerIds: allDead ? [] : rolePlayers.map((p) => p.id),
         maxTargets: role.maxTargets,
+        ...(allDead && { isDeadRole: true }),
       });
     }
   }

@@ -625,6 +625,22 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
                       {currentStep.type === "role_action" &&
                         currentStep.roleId &&
                         (() => {
+                          // Dead role — show hint to game master, no interaction needed
+                          if (currentStep.isDeadRole) {
+                            return (
+                              <div className="w-full pt-6">
+                                <div className="p-4 rounded-2xl bg-rose-500/10 border-2 border-rose-500/20 text-center animate-in fade-in duration-300">
+                                  <div className="flex items-center justify-center gap-2 mb-1">
+                                    <Skull className="h-4 w-4 text-rose-400" />
+                                    <p className="text-sm font-bold text-rose-400">
+                                      {t["phase.roleAction.deadRole"]}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
+
                           const rolePlayers = stepPlayers.filter(
                             (p) => p?.isAlive,
                           );
