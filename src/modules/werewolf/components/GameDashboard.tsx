@@ -644,10 +644,14 @@ export const GameDashboard: React.FC<GameDashboardProps> = ({
                           const rolePlayers = stepPlayers.filter(
                             (p) => p?.isAlive,
                           );
-                          // Targetable = alive players not in this role group
-                          const targetable = players.filter(
-                            (p) => p.isAlive && p.roleId !== currentStep.roleId,
-                          );
+                          // Targetable = alive players (Werewolves cannot target other werewolves)
+                          const targetable = players.filter((p) => {
+                            if (!p.isAlive) return false;
+                            if (currentStep.roleId === "werewolf") {
+                              return p.roleId !== "werewolf";
+                            }
+                            return true;
+                          });
                           const stepTargets =
                             selectedTargets[currentStep.id] || [];
 
