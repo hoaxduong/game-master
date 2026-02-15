@@ -220,7 +220,7 @@ export const toggleTarget = (stepId: string, playerId: string) => {
   }
 };
 
-export const resetGame = () => {
+export const resetGame = (keepPlayers: boolean = false) => {
   // Generate new ID for next game
   const newId = crypto.randomUUID();
 
@@ -233,8 +233,21 @@ export const resetGame = () => {
     winner: null,
   });
 
-  // Reset players to empty
-  $players.set([]);
+  // Handle player preservation
+  if (keepPlayers) {
+    const currentPlayers = $players.get();
+    $players.set(
+      currentPlayers.map((p) => ({
+        ...p,
+        roleId: undefined,
+        isAlive: true,
+        notes: "",
+      })),
+    );
+  } else {
+    $players.set([]);
+  }
+
   $selectedTargets.set({});
   $lovers.set([]);
   $witchPotions.set({ life: true, death: true });
