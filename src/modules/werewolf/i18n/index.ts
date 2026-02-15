@@ -158,6 +158,13 @@ export const werewolf = {
       "Darkness covers the silent village. A knock echoes in the dead of night...",
     "narrator.day.vn_folklore":
       "The rooster crows, breaking the night. What truth will be revealed?",
+
+    // Game Over
+    "game.over": "Game Over",
+    "game.winner.village": "The Village Wins!",
+    "game.winner.werewolves": "The Werewolves Win!",
+    "game.winner.lovers": "The Lovers Win!",
+    "game.survivors": "Survivors",
   },
   vi: {
     "role.villager.name": "Dân làng",
@@ -314,5 +321,12 @@ export const werewolf = {
       "Bóng đêm bao trùm không gian tịch mịch. Tiếng gõ cửa vang lên giữa đêm khuya...",
     "narrator.day.vn_folklore":
       "Tiếng gà gáy sáng phá tan màn đêm. Sự thật nào sẽ được phơi bày?",
+
+    // Game Over
+    "game.over": "Trò Chơi Kết Thúc",
+    "game.winner.village": "Dân Làng Chiến Thắng!",
+    "game.winner.werewolves": "Ma Sói Chiến Thắng!",
+    "game.winner.lovers": "Đôi Tình Nhân Chiến Thắng!",
+    "game.survivors": "Người Sống Sót",
   },
 } as const;

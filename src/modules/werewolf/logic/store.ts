@@ -2,6 +2,7 @@ import { atom, map, onMount } from "nanostores";
 import type { WerewolfRole } from "../types/roles";
 import { calculateNightResults } from "./nightResult";
 import { saveSessionToApi, loadSessionFromApi } from "./session-api";
+import { checkWinCondition, type WinResult } from "./winCondition";
 
 export interface Player {
   id: string;
@@ -17,6 +18,7 @@ export interface GameSettings {
   phase: "day" | "night";
   cycle: number;
   phaseStepIndex: number;
+  winner: WinResult;
 }
 
 export interface WerewolfState {
@@ -37,6 +39,7 @@ export const $gameSettings = map<GameSettings>({
   phase: "night",
   cycle: 0,
   phaseStepIndex: 0,
+  winner: null,
 });
 
 // New persistent states
@@ -189,6 +192,7 @@ export const startGame = async () => {
   $gameSettings.setKey("cycle", 1);
   $gameSettings.setKey("phase", "night");
   $gameSettings.setKey("phaseStepIndex", 0);
+  $gameSettings.setKey("winner", null);
 
   // Immediately save to API to prevent race condition on redirect
   await saveSessionToApi({
@@ -226,6 +230,7 @@ export const resetGame = () => {
     phase: "night",
     cycle: 0,
     phaseStepIndex: 0,
+    winner: null,
   });
 
   // Reset players to empty
@@ -304,6 +309,14 @@ export const advancePhase = () => {
     }
   }
 
+  // Check win condition after eliminations
+  const winner = checkWinCondition($players.get(), $lovers.get());
+  if (winner) {
+    $gameSettings.setKey("winner", winner);
+    $gameSettings.setKey("status", "ended");
+    return;
+  }
+
   $gameSettings.setKey("phase", nextPhase);
   $gameSettings.setKey("phaseStepIndex", 0);
   if (nextPhase === "night") {
@@ -320,6 +333,13 @@ export const resolveHunterShot = (targetId: string) => {
       .map((p) => (p.id === targetId ? { ...p, isAlive: false } : p)),
   );
   $hunterPendingShot.set(null);
+
+  // Check win condition after hunter's shot
+  const winner = checkWinCondition($players.get(), $lovers.get());
+  if (winner) {
+    $gameSettings.setKey("winner", winner);
+    $gameSettings.setKey("status", "ended");
+  }
 };
 
 export const setPhaseStepIndex = (index: number) => {
